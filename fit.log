@@ -1,0 +1,36 @@
+
+
+*******************************************************************************
+Thu May 14 14:35:57 2026
+
+
+FIT:    data read from 'frequency_total_sorted.dat' u 1:3
+        format = x:z
+        #datapoints = 114
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x) = a * x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 4.2962100000e+05   0.00e+00  2.13e+02    1.000000e+00   1.000000e+00
+  21 6.9997655221e+02  -3.86e-02  2.13e-06    3.142709e+01  -3.402721e-01
+
+After 21 iterations the fit converged.
+final sum of squares of residuals : 699.977
+rel. change during last iteration : -3.85958e-07
+
+degrees of freedom    (FIT_NDF)                        : 112
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 2.49996
+variance of residuals (reduced chisquare) = WSSR/ndf   : 6.24979
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 31.4271          +/- 1.617        (5.144%)
+b               = -0.340272        +/- 0.01639      (4.816%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -0.892  1.000 

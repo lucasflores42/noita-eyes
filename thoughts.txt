@@ -571,3 +571,8 @@ msgE5 = [
      66,  45,  22,  80,  44,  45,  25,  83,  15,  47,  21,  64,  53,  38,  67,
      43,  51,  46,  53,  59,  50,  67,  13,  68
 ]
+
+
+- try isomorphs
+- just replace most common with english letters
+- collapse to 26 letters

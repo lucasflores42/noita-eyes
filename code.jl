@@ -99,8 +99,9 @@ msgE5a = [
      43,  51,  46,  53,  59,  50,  67,  13,  68
 ]
 
-function decrypt(msg, N=83)
-    [mod(x - i - 1, N) + 1 for (i,x) in enumerate(msg)]
+function decrypt(msg, N=26)
+    #[mod(x - i - 1, N) + 1 for (i,x) in enumerate(msg)]
+    return msg
 end
 
 msgE1 = decrypt(msgE1a)

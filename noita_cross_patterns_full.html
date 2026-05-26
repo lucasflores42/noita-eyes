@@ -1,0 +1,195 @@
+
+<style>
+  h2 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin: 1.5rem 0 0.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th { text-align: left; color: var(--color-text-secondary); font-weight: 400; font-size: 11px; padding: 4px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); white-space: nowrap; }
+  td { padding: 3px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; font-family: var(--font-mono); font-size: 11px; color: var(--color-text-primary); }
+  td.pat { color: var(--color-text-secondary); font-size: 12px; white-space: nowrap; font-family: var(--font-mono); }
+  td.len { color: var(--color-text-tertiary); font-size: 11px; text-align: center; }
+  td.msgs { font-size: 11px; color: var(--color-text-secondary); }
+  .occ { display: block; margin: 1px 0; }
+  .mn { color: var(--color-text-info); font-weight: 500; }
+  .rep { color: var(--color-text-danger); font-weight: 500; }
+  .pos { color: var(--color-text-tertiary); }
+  .note { font-size: 11px; color: var(--color-text-warning); }
+  tr:hover td { background: var(--color-background-secondary); }
+</style>
+
+<h2>Padrões isomórficos compartilhados entre 3+ mensagens</h2>
+
+<table>
+<thead>
+<tr>
+  <th>padrão</th>
+  <th>len</th>
+  <th>mensagens + ocorrências (pos → valores)</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+
+<script>
+const data = [
+  { pat: "a b a", len: 3, entries: [
+    { msg: "msgE3a", occ: [[27, [17,49,17]]] },
+    { msg: "msgW2a", occ: [[21, [19,15,19]]] },
+    { msg: "msgW3a", occ: [[26,[8,65,8]], [76,[77,1,77]], [94,[20,48,20]]] },
+  ]},
+  { pat: "a b c b", len: 4, entries: [
+    { msg: "msgE3a", occ: [[26,[31,17,49,17]]] },
+    { msg: "msgW2a", occ: [[20,[72,19,15,19]]] },
+    { msg: "msgW3a", occ: [[25,[7,8,65,8]], [75,[52,77,1,77]], [93,[40,20,48,20]]] },
+  ]},
+  { pat: "a b a c", len: 4, entries: [
+    { msg: "msgE3a", occ: [[27,[17,49,17,33]]] },
+    { msg: "msgW2a", occ: [[21,[19,15,19,71]]] },
+    { msg: "msgW3a", occ: [[26,[8,65,8,33]], [76,[77,1,77,21]], [94,[20,48,20,70]]] },
+  ]},
+  { pat: "a b c a", len: 4, entries: [
+    { msg: "msgE1a", occ: [[42,[70,67,8,70]], [70,[46,58,3,46]]] },
+    { msg: "msgE2a", occ: [[47,[51,61,71,51]], [82,[57,11,12,57]]] },
+    { msg: "msgE3a", occ: [[103,[9,3,25,9]]] },
+    { msg: "msgW1a", occ: [[42,[70,67,8,70]], [72,[9,78,17,9]]] },
+    { msg: "msgW2a", occ: [[96,[50,18,35,50]]] },
+    { msg: "msgW3a", occ: [[119,[36,13,79,36]]] },
+  ]},
+  { pat: "a b c d c", len: 5, entries: [
+    { msg: "msgE3a", occ: [[25,[68,31,17,49,17]]] },
+    { msg: "msgW2a", occ: [[19,[53,72,19,15,19]]] },
+    { msg: "msgW3a", occ: [[24,[20,7,8,65,8]], [74,[74,52,77,1,77]], [92,[67,40,20,48,20]]] },
+  ]},
+  { pat: "a b c b d", len: 5, entries: [
+    { msg: "msgE3a", occ: [[26,[31,17,49,17,33]]] },
+    { msg: "msgW2a", occ: [[20,[72,19,15,19,71]]] },
+    { msg: "msgW3a", occ: [[25,[7,8,65,8,33]], [75,[52,77,1,77,21]], [93,[40,20,48,20,70]]] },
+  ]},
+  { pat: "a b a c d", len: 5, entries: [
+    { msg: "msgE3a", occ: [[27,[17,49,17,33,14]]] },
+    { msg: "msgW2a", occ: [[21,[19,15,19,71,36]]] },
+    { msg: "msgW3a", occ: [[26,[8,65,8,33,67]], [76,[77,1,77,21,75]], [94,[20,48,20,70,2]]] },
+  ]},
+  { pat: "a b c d b", len: 5, entries: [
+    { msg: "msgE1a", occ: [[41,[66,70,67,8,70]], [69,[20,46,58,3,46]]] },
+    { msg: "msgE2a", occ: [[46,[17,51,61,71,51]], [81,[47,57,11,12,57]]] },
+    { msg: "msgE3a", occ: [[102,[72,9,3,25,9]]] },
+    { msg: "msgW1a", occ: [[41,[66,70,67,8,70]], [71,[73,9,78,17,9]]] },
+    { msg: "msgW2a", occ: [[95,[69,50,18,35,50]]] },
+    { msg: "msgW3a", occ: [[118,[46,36,13,79,36]]] },
+  ]},
+  { pat: "a b c a d", len: 5, entries: [
+    { msg: "msgE1a", occ: [[42,[70,67,8,70,17]], [70,[46,58,3,46,8]]] },
+    { msg: "msgE2a", occ: [[47,[51,61,71,51,50]], [82,[57,11,12,57,39]]] },
+    { msg: "msgE3a", occ: [[103,[9,3,25,9,21]]] },
+    { msg: "msgW1a", occ: [[42,[70,67,8,70,17]], [72,[9,78,17,9,15]]] },
+    { msg: "msgW2a", occ: [[96,[50,18,35,50,49]]] },
+    { msg: "msgW3a", occ: [[119,[36,13,79,36,44]]] },
+  ]},
+  { pat: "a b c d e d", len: 6, entries: [
+    { msg: "msgE3a", occ: [[24,[56,68,31,17,49,17]]] },
+    { msg: "msgW2a", occ: [[18,[54,53,72,19,15,19]]] },
+    { msg: "msgW3a", occ: [[23,[82,20,7,8,65,8]], [73,[79,74,52,77,1,77]], [91,[28,67,40,20,48,20]]] },
+  ]},
+  { pat: "a b c d c e", len: 6, entries: [
+    { msg: "msgE3a", occ: [[25,[68,31,17,49,17,33]]] },
+    { msg: "msgW2a", occ: [[19,[53,72,19,15,19,71]]] },
+    { msg: "msgW3a", occ: [[24,[20,7,8,65,8,33]], [74,[74,52,77,1,77,21]], [92,[67,40,20,48,20,70]]] },
+  ]},
+  { pat: "a b c b d e", len: 6, entries: [
+    { msg: "msgE3a", occ: [[26,[31,17,49,17,33,14]]] },
+    { msg: "msgW2a", occ: [[20,[72,19,15,19,71,36]]] },
+    { msg: "msgW3a", occ: [[25,[7,8,65,8,33,67]], [75,[52,77,1,77,21,75]], [93,[40,20,48,20,70,2]]] },
+  ]},
+  { pat: "a b a c d e", len: 6, entries: [
+    { msg: "msgE3a", occ: [[27,[17,49,17,33,14,74]]] },
+    { msg: "msgW2a", occ: [[21,[19,15,19,71,36,81]]] },
+    { msg: "msgW3a", occ: [[26,[8,65,8,33,67,3]], [76,[77,1,77,21,75,54]], [94,[20,48,20,70,2,42]]] },
+  ]},
+  { pat: "a b c d b e", len: 6, entries: [
+    { msg: "msgE1a", occ: [[41,[66,70,67,8,70,17]], [69,[20,46,58,3,46,8]]] },
+    { msg: "msgE2a", occ: [[46,[17,51,61,71,51,50]], [81,[47,57,11,12,57,39]]] },
+    { msg: "msgE3a", occ: [[102,[72,9,3,25,9,21]]] },
+    { msg: "msgW1a", occ: [[41,[66,70,67,8,70,17]], [71,[73,9,78,17,9,15]]] },
+    { msg: "msgW2a", occ: [[95,[69,50,18,35,50,49]]] },
+    { msg: "msgW3a", occ: [[118,[46,36,13,79,36,44]]] },
+  ]},
+  { pat: "a b c a d e", len: 6, entries: [
+    { msg: "msgE1a", occ: [[42,[70,67,8,70,17,72]], [70,[46,58,3,46,8,48]]] },
+    { msg: "msgE2a", occ: [[47,[51,61,71,51,50,25]], [82,[57,11,12,57,39,68]]] },
+    { msg: "msgE3a", occ: [[103,[9,3,25,9,21,78]]] },
+    { msg: "msgW1a", occ: [[42,[70,67,8,70,17,72]], [72,[9,78,17,9,15,40]]] },
+    { msg: "msgW2a", occ: [[96,[50,18,35,50,49,10]]] },
+  ]},
+  { pat: "a b c d e a", len: 6, entries: [
+    { msg: "msgE2a", occ: [[57,[16,69,13,63,29,16]], [92,[21,2,63,27,22,21]]] },
+    { msg: "msgE3a", occ: [[7,[49,61,64,27,72,49]], [36,[4,56,70,83,30,4]], [117,[55,58,83,18,51,55]]] },
+    { msg: "msgE5a", occ: [[23,[56,66,7,60,30,56]]] },
+    { msg: "msgW1a", occ: [[54,[51,65,28,60,47,51]], [84,[52,32,6,16,45,52]]] },
+    { msg: "msgW2a", occ: [[33,[23,22,52,17,32,23]], [45,[31,21,65,48,2,31]], [74,[82,83,51,12,74,82]]] },
+  ]},
+  { pat: "a b c d e c", len: 6, entries: [
+    { msg: "msgE1a", occ: [[40,[72,66,70,67,8,70]], [68,[48,20,46,58,3,46]]] },
+    { msg: "msgE2a", occ: [[45,[25,17,51,61,71,51]], [80,[68,47,57,11,12,57]]] },
+    { msg: "msgE3a", occ: [[101,[78,72,9,3,25,9]]] },
+    { msg: "msgW1a", occ: [[40,[72,66,70,67,8,70]], [70,[40,73,9,78,17,9]]] },
+    { msg: "msgW2a", occ: [[94,[24,69,50,18,35,50]]] },
+    { msg: "msgW3a", occ: [[117,[26,46,36,13,79,36]]] },
+  ]},
+  { pat: "a b c d a e", len: 6, entries: [
+    { msg: "msgE1a", occ: [[44,[8,70,17,72,8,71]], [72,[3,46,8,48,3,38]]] },
+    { msg: "msgE2a", occ: [[49,[71,51,50,25,71,83]], [84,[12,57,39,68,12,7]]] },
+    { msg: "msgE3a", occ: [[12,[49,26,42,48,49,4]], [64,[55,23,44,5,55,58]], [81,[79,48,10,19,79,39]]] },
+    { msg: "msgE4a", occ: [[6,[4,49,61,64,4,54]], [35,[36,28,26,70,36,54]], [73,[49,7,26,65,49,56]], [90,[63,52,83,27,63,57]]] },
+    { msg: "msgE5a", occ: [[6,[4,49,61,64,4,54]], [35,[36,21,71,70,36,54]], [74,[59,69,67,31,59,19]], [91,[45,22,80,44,45,25]]] },
+    { msg: "msgW1a", occ: [[21,[61,17,71,5,61,20]], [44,[8,70,17,72,8,71]], [74,[17,9,15,40,17,23]]] },
+    { msg: "msgW2a", occ: [[56,[52,7,16,71,52,51]], [73,[12,82,83,51,12,74]]] },
+    { msg: "msgW3a", occ: [[65,[65,7,76,72,65,6]], [78,[77,21,75,54,77,17]]] },
+    { msg: "msgW4a", occ: [[6,[4,49,61,64,4,54]], [36,[76,9,46,33,76,18]], [76,[43,72,35,81,43,12]], [93,[15,38,41,46,15,21]]] },
+  ]},
+  { pat: "a b c d a", len: 5, entries: [
+    { msg: "msgE1a", occ: [[44,[8,70,17,72,8]], [72,[3,46,8,48,3]]] },
+    { msg: "msgE2a", occ: [[49,[71,51,50,25,71]], [84,[12,57,39,68,12]]] },
+    { msg: "msgE3a", occ: [[12,[49,26,42,48,49]], [64,[55,23,44,5,55]], [81,[79,48,10,19,79]]] },
+    { msg: "msgE4a", occ: [[6,[4,49,61,64,4]], [35,[36,28,26,70,36]], [73,[49,7,26,65,49]], [90,[63,52,83,27,63]]] },
+    { msg: "msgE5a", occ: [[6,[4,49,61,64,4]], [35,[36,21,71,70,36]], [74,[59,69,67,31,59]], [91,[45,22,80,44,45]]] },
+    { msg: "msgW1a", occ: [[21,[61,17,71,5,61]], [44,[8,70,17,72,8]], [74,[17,9,15,40,17]]] },
+    { msg: "msgW2a", occ: [[56,[52,7,16,71,52]], [73,[12,82,83,51,12]]] },
+    { msg: "msgW3a", occ: [[65,[65,7,76,72,65]], [78,[77,21,75,54,77]]] },
+    { msg: "msgW4a", occ: [[6,[4,49,61,64,4]], [36,[76,9,46,33,76]], [76,[43,72,35,81,43]], [93,[15,38,41,46,15]]] },
+  ]},
+  { pat: "a b c d e b", len: 6, entries: [
+    { msg: "msgE1a", occ: [[43,[67,8,70,17,72,8]], [71,[58,3,46,8,48,3]]] },
+    { msg: "msgE2a", occ: [[48,[61,71,51,50,25,71]], [83,[11,12,57,39,68,12]]] },
+    { msg: "msgE3a", occ: [[11,[72,49,26,42,48,49]], [63,[25,55,23,44,5,55]], [80,[45,79,48,10,19,79]]] },
+    { msg: "msgE4a", occ: [[5,[36,4,49,61,64,4]], [34,[9,36,28,26,70,36]], [72,[14,49,7,26,65,49]], [89,[2,63,52,83,27,63]]] },
+    { msg: "msgE5a", occ: [[5,[36,4,49,61,64,4]], [34,[19,36,21,71,70,36]], [73,[12,59,69,67,31,59]], [90,[66,45,22,80,44,45]]] },
+    { msg: "msgW1a", occ: [[20,[4,61,17,71,5,61]], [43,[67,8,70,17,72,8]], [73,[78,17,9,15,40,17]]] },
+    { msg: "msgW2a", occ: [[55,[59,52,7,16,71,52]], [72,[63,12,82,83,51,12]]] },
+    { msg: "msgW3a", occ: [[64,[73,65,7,76,72,65]], [77,[1,77,21,75,54,77]]] },
+    { msg: "msgW4a", occ: [[5,[36,4,49,61,64,4]], [35,[62,76,9,46,33,76]], [75,[65,43,72,35,81,43]], [92,[14,15,38,41,46,15]]] },
+  ]},
+];
+
+function renderVals(vals) {
+  const counts = {};
+  vals.forEach(v => counts[v] = (counts[v]||0)+1);
+  return vals.map(v => counts[v] > 1 ? `<span class="rep">${v}</span>` : `${v}`).join(' ');
+}
+
+const tbody = document.getElementById('tbody');
+let html = '';
+data.sort((a,b) => a.len - b.len || a.pat.localeCompare(b.pat));
+data.forEach(({pat, len, entries}) => {
+  const allOcc = entries.map(({msg, occ}) => {
+    const occStr = occ.map(([pos, vals]) =>
+      `<span class="pos">@${pos}</span>[${renderVals(vals)}]`
+    ).join(' ');
+    return `<span class="occ"><span class="mn">${msg}</span>: ${occStr}</span>`;
+  }).join('');
+  html += `<tr>
+    <td class="pat">${pat}</td>
+    <td class="len">${len}</td>
+    <td>${allOcc}</td>
+  </tr>`;
+});
+tbody.innerHTML = html;
+</script>

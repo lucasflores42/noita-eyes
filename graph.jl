@@ -1,6 +1,7 @@
 using Graphs
 using GraphMakie
 using CairoMakie
+using NetworkLayout
 
 g = SimpleGraph(83)
 
@@ -97,7 +98,7 @@ for e in weak_edges
 end
 
 edge_colors = [
-    e in Edge.(strong_edges) ? :red : :black
+    e in Edge.(strong_edges) ? :red : :blue
     for e in edges(g)
 ]
 
@@ -110,12 +111,17 @@ graphplot!(
     ax,
     g,
 
+    layout = Spring(C = 7),
+
     nlabels = labels,
     nlabels_textsize = 18,
 
+    nlabels_color = :purple,
+    nlabels_strokewidth = 2,
+
     node_size = 15,
 
-    edge_width = 2,
+    edge_width = 1,
     edge_color = edge_colors
 )
 

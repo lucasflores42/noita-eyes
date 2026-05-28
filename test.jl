@@ -99,8 +99,45 @@ msgE5a = [
      43,  51,  46,  53,  59,  50,  67,  13,  68
 ]
 
+#msgE1 = replace(msgE1a, 43 => 'A')
+#@printf("Message E1: %s\n", msgE1)
 
+# Mapeamento dos números para letras
+mapa = Dict(
+    21 => 'A', 17 => 'A', 43 => 'A',  # A
+    49 => 'I', 36 => 'I',              # I  
+    71 => 'N', 72 => 'N',              # N
+    15 => 'T', 52 => 'T',              # T
+    63 => 'E', 26 => 'E',              # E
+    51 => 'S', 67 => 'S',              # S
+    70 => 'L', 79 => 'L',              # L
+    81 => 'O', 31 => 'O',              # O
+    65 => 'U', 33 => 'U',              # U
+    4  => ' ', 59 => ' ', 64 => ' ',   # espaço
+    5  => 'K', 61 => 'K',              # K
+    1  => '.', 83 => '?',              # pontuação
+)
 
-msgE1 = replace(msgE1a, 43 => 'A')
+# Função para converter
+function decodificar(msg)
+    texto = ""
+    for n in msg
+        if haskey(mapa, n)
+            texto *= mapa[n]
+        else
+            texto *= '?'  # não mapeado
+        end
+    end
+    return texto
+end
 
-@printf("Message E1: %s\n", msgE1)
+# Print das mensagens
+println("East 1:  ", decodificar(msgE1a))
+println("West 1:  ", decodificar(msgW1a))
+println("East 2:  ", decodificar(msgE2a))
+println("West 2:  ", decodificar(msgW2a))
+println("East 3:  ", decodificar(msgE3a))
+println("West 3:  ", decodificar(msgW3a))
+println("East 4:  ", decodificar(msgE4a))
+println("West 4:  ", decodificar(msgW4a))
+println("East 5:  ", decodificar(msgE5a))

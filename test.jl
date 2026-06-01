@@ -102,20 +102,60 @@ msgE5a = [
 #msgE1 = replace(msgE1a, 43 => 'A')
 #@printf("Message E1: %s\n", msgE1)
 
+#=
+e, t, a, i, o, n, s, h, and r.
+
+The most common two-letter words are to, of, in, it, is, as, at, be, we, he, so, on, an, or, do, if, up, by, and my
+
+The most common three-letter words are the, and, are,for, not, but, had, has, was, all, any, one, man, out, you, his, her, and can.
+
+The most common four-letter words are that, with, have, this, will, your, from, they, want, been, good, much, some, and very.
+
+The most common word endings are -ed, -ing, -ion, -ist, -ous, -ent, -able, -ment, -tion, -ight, and -ance.
+
+The most frequent double-letter combinations are ee, ll, ss, oo, tt,ff, rr, nn, pp, and cc.
+
+The double letters that occur most commonly at the end of words are ee, ll, ss, and ff.
+
+A comma is often followed by but, and, or who.
+A question often begins with why, how, who, was, did, what, where, or which.
+Two words that often precede quotation marks are said and says.
+Two letters that usually follow an apostrophe are t and s.
+
+=#
+
 # Mapeamento dos números para letras
 mapa = Dict(
-    21 => 'A', 17 => 'A', 43 => 'A',  # A
-    49 => 'I', 36 => 'I',              # I  
-    71 => 'N', 72 => 'N',              # N
-    15 => 'T', 52 => 'T',              # T
-    63 => 'E', 26 => 'E',              # E
-    51 => 'S', 67 => 'S',              # S
-    70 => 'L', 79 => 'L',              # L
-    81 => 'O', 31 => 'O',              # O
-    65 => 'U', 33 => 'U',              # U
-    4  => ' ', 59 => ' ', 64 => ' ',   # espaço
-    5  => 'K', 61 => 'K',              # K
-    1  => '.', 83 => '?',              # pontuação
+
+     # isomorphs: a b a
+     #19 => 'T', 15 => 'O',
+     #8 => 'T', 65 => 'O',
+     #17 => 'T', 49 => 'O', 
+     #77 => 'T', 1 => 'O', 
+     #20 => 'T', 48 => 'O', 
+
+     # isomorphs: a b c a 
+     #70 => 'T', 67 => 'H', 8 => 'E',
+     #51 => 'T', 61 => 'H', 71 => 'E',
+     #46 => 'T', 58 => 'H', 3 => 'E',
+     #9 => 'T', 78 => 'H', 17 => 'E',
+     #57 => 'T', 11 => 'H', 12 => 'E',
+     #50 => 'T', 18 => 'H', 35 => 'E',
+     #9 => 'T', 3 => 'H', 25 => 'E',
+     #36 => 'T', 13 => 'H', 79 => 'E',
+
+     #=
+     21 => 'A', 28 => 'A',
+     26 => 'C', 71 => 'C',
+     12 => 'B', 49 => 'B',
+     7 => 'D', 82 => 'D',
+     26 => 'E', 83 => 'E',
+     51 => 'F', 65 => 'F',
+     17 => 'G', 59 => 'G',
+     9 => 'H', 69 => 'H',
+     15 => 'I', 67 => 'I',
+     31 => 'J', 40 => 'J'
+    =#
 )
 
 # Função para converter
@@ -125,7 +165,7 @@ function decodificar(msg)
         if haskey(mapa, n)
             texto *= mapa[n]
         else
-            texto *= '?'  # não mapeado
+            texto *= "_"
         end
     end
     return texto
@@ -141,3 +181,34 @@ println("West 3:  ", decodificar(msgW3a))
 println("East 4:  ", decodificar(msgE4a))
 println("West 4:  ", decodificar(msgW4a))
 println("East 5:  ", decodificar(msgE5a))
+
+
+
+# Verificar padrão a b a b em todas as mensagens
+mensagens = [
+    (msgE1a, "E1"), (msgW1a, "W1"), (msgE2a, "E2"), (msgW2a, "W2"),
+    (msgE3a, "E3"), (msgW3a, "W3"), (msgE4a, "E4"), (msgW4a, "W4"), (msgE5a, "E5")
+]
+
+println("PROCURANDO PADRÃO a b a b (X Y X Y)")
+println("="^60)
+
+encontrou = false
+
+for (msg, nome) in mensagens
+    for i in 1:length(msg)-3
+        a = msg[i]
+        b = msg[i+1]
+        c = msg[i+2]
+        d = msg[i+3]
+        
+        if a == c && b == d
+            println("$nome: posição $i → [$a, $b, $c, $d]")
+            encontrou = true
+        end
+    end
+end
+
+if !encontrou
+    println("NENHUM padrão a b a b encontrado em nenhuma mensagem.")
+end

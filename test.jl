@@ -127,8 +127,6 @@ Two letters that usually follow an apostrophe are t and s.
 # Mapeamento dos números para letras
 mapa = Dict(
 
-     43 => 'S', 21 => 'E', 71 => 'E',
-
      # isomorphs: a b a
      #19 => 'E', 15 => 'Y',
      #8 => 'E', 65 => 'Y',
@@ -146,18 +144,16 @@ mapa = Dict(
      #9 => 'E', 3 => 'D', 25 => 'G',
      #36 => 'E', 13 => 'D', 79 => 'G',
 
-     #=
-     21 => 'A', 28 => 'A',
-     26 => 'C', 71 => 'C',
-     12 => 'B', 49 => 'B',
-     7 => 'D', 82 => 'D',
-     26 => 'E', 83 => 'E',
-     51 => 'F', 65 => 'F',
-     17 => 'G', 59 => 'G',
-     9 => 'H', 69 => 'H',
-     15 => 'I', 67 => 'I',
-     31 => 'J', 40 => 'J'
-    =#
+     21 => 's', 28 => 's',
+     26 => 'e', 71 => 'e', 26 => 'e', 83 => 'e',
+     12 => 'C', 49 => 'C',
+      7 => 'D', 82 => 'D',
+     51 => 'l', 65 => 'l',
+     17 => 'i', 59 => 'i',
+      9 => 'G', 69 => 'G',
+     15 => 'H', 67 => 'H', # sim
+     31 => 'I', 40 => 'I'
+    
 )
 
 # Função para converter
@@ -166,6 +162,7 @@ function decodificar(msg)
     for n in msg
         if haskey(mapa, n)
             texto *= mapa[n]
+            #texto *= string(n)
         else
             texto *= "_"
         end
@@ -185,17 +182,11 @@ println("West 4:  ", decodificar(msgW4a))
 println("East 5:  ", decodificar(msgE5a))
 
 
-
-# Verificar padrão a b a b em todas as mensagens
+println()
 mensagens = [
     (msgE1a, "E1"), (msgW1a, "W1"), (msgE2a, "E2"), (msgW2a, "W2"),
     (msgE3a, "E3"), (msgW3a, "W3"), (msgE4a, "E4"), (msgW4a, "W4"), (msgE5a, "E5")
 ]
-
-println("PROCURANDO PADRÃO a b a b (X Y X Y)")
-println("="^60)
-
-encontrou = false
 
 for (msg, nome) in mensagens
     for i in 1:length(msg)-3
@@ -206,7 +197,6 @@ for (msg, nome) in mensagens
         
         if a == c && b == d
             println("$nome: posição $i → [$a, $b, $c, $d]")
-            encontrou = true
         end
     end
 end

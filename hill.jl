@@ -273,6 +273,18 @@ function solve_cipher(cipher::Vector{Int}, ngrams::Dict{String, Float64}; restar
     println("  W4: $(overall_best_text[799:918])")
     println("  E5: $(overall_best_text[919:1032])")
     
+    open("hill_result.dat", "w") do f
+    write(f, "E1: $(overall_best_text[1:98])\n")
+    write(f, "W1: $(overall_best_text[99:200])\n")
+    write(f, "E2: $(overall_best_text[201:318])\n")
+    write(f, "W2: $(overall_best_text[319:420])\n")
+    write(f, "E3: $(overall_best_text[421:556])\n")
+    write(f, "W3: $(overall_best_text[557:680])\n")
+    write(f, "E4: $(overall_best_text[681:798])\n")
+    write(f, "W4: $(overall_best_text[799:918])\n")
+    write(f, "E5: $(overall_best_text[919:1032])\n")
+end
+    
     return overall_best_key, overall_best_score, overall_best_text
 end
 
@@ -297,4 +309,4 @@ end
 
 
 
-solve_cipher(ciphertext, ngrams, restarts=10, iterations_per_restart=1E+3)
+solve_cipher(ciphertext, ngrams, restarts=10, iterations_per_restart=1E+1)

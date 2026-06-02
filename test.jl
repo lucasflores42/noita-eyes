@@ -111,7 +111,7 @@ The most common three-letter words are the, and, are,for, not, but, had, has, wa
 
 The most common four-letter words are that, with, have, this, will, your, from, they, want, been, good, much, some, and very.
 
-The most common word endings are -ed, -ing, -ion, -ist, -ous, -ent, -able, -ment, -tion, -ight, and -ance.
+The most common word endings are -ed, -ing, -ion, -ist, -ous, -ent, -able, -ment, -tion, -ight, and -ance.    
 
 The most frequent double-letter combinations are ee, ll, ss, oo, tt,ff, rr, nn, pp, and cc.
 
@@ -127,22 +127,24 @@ Two letters that usually follow an apostrophe are t and s.
 # Mapeamento dos números para letras
 mapa = Dict(
 
+     43 => 'S', 21 => 'E', 71 => 'E',
+
      # isomorphs: a b a
-     #19 => 'T', 15 => 'O',
-     #8 => 'T', 65 => 'O',
-     #17 => 'T', 49 => 'O', 
-     #77 => 'T', 1 => 'O', 
-     #20 => 'T', 48 => 'O', 
+     #19 => 'E', 15 => 'Y',
+     #8 => 'E', 65 => 'Y',
+     #17 => 'E', 49 => 'Y', 
+     #77 => 'E', 1 => 'Y', 
+     #20 => 'E', 48 => 'Y', 
 
      # isomorphs: a b c a 
-     #70 => 'T', 67 => 'H', 8 => 'E',
-     #51 => 'T', 61 => 'H', 71 => 'E',
-     #46 => 'T', 58 => 'H', 3 => 'E',
-     #9 => 'T', 78 => 'H', 17 => 'E',
-     #57 => 'T', 11 => 'H', 12 => 'E',
+     #70 => 'E', 67 => 'D', 8 => 'G',
+     #51 => 'E', 61 => 'D', 71 => 'G',
+     #46 => 'E', 58 => 'D', 3 => 'G',
+     #9 => 'T', 78 => 'H', 17 => 'A',
+     #57 => 'T', 11 => 'H', 12 => 'A',
      #50 => 'T', 18 => 'H', 35 => 'E',
-     #9 => 'T', 3 => 'H', 25 => 'E',
-     #36 => 'T', 13 => 'H', 79 => 'E',
+     #9 => 'E', 3 => 'D', 25 => 'G',
+     #36 => 'E', 13 => 'D', 79 => 'G',
 
      #=
      21 => 'A', 28 => 'A',
@@ -207,8 +209,4 @@ for (msg, nome) in mensagens
             encontrou = true
         end
     end
-end
-
-if !encontrou
-    println("NENHUM padrão a b a b encontrado em nenhuma mensagem.")
 end

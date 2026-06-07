@@ -190,7 +190,7 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
     best_score = current_score
     
     for iter in 1:iterations
-        temp = 50.0 * (1.0 - iter / iterations)
+        temp = 50.0 #* (1.0 - iter / iterations)
         
         new_key = copy(current_key)
         idx = rand(1:MAX_SYMBOL)
@@ -211,8 +211,9 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
             end
         end
         
-        #text = String(decodificado)
-        #println("$iter  E1: $(text[1:98])")
+        text = String(decodificado)
+        println( "t=$iter  E1: $(text[1:98]) score=$(round(new_score, digits=3))" )
+
     end
     
     final_text = String([best_key[c] for c in cipher])
@@ -309,4 +310,4 @@ end
 
 
 
-solve_cipher(ciphertext, ngrams, restarts=10, iterations_per_restart=1E+1)
+solve_cipher(ciphertext, ngrams, restarts=1, iterations_per_restart=1E+6)

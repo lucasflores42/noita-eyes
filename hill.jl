@@ -141,7 +141,8 @@ function load_ngrams(filename::String; min_len=2, max_len=4)
                 if min_len <= len_ngram <= max_len
                     
                     prob = count / total_count
-                    ngrams[ngram] = prob * 1000
+                    #ngrams[ngram] = prob #* 1000
+                    ngrams[ngram] = log10(prob)
                 end
             end
         end
@@ -153,30 +154,56 @@ function load_ngrams(filename::String; min_len=2, max_len=4)
     return ngrams
 end
 
+function frequency_penalty(text::Vector{Char})
+    expected = Dict(
+        'E'=>0.127,'T'=>0.091,'A'=>0.082,'O'=>0.075,'I'=>0.070,
+        'N'=>0.067,'S'=>0.063,'H'=>0.061,'R'=>0.060,'D'=>0.043,
+        'L'=>0.040,'C'=>0.028,'U'=>0.028,'M'=>0.024,'W'=>0.023,
+        'F'=>0.022,'G'=>0.020,'Y'=>0.020,'P'=>0.019,'B'=>0.015,
+        'V'=>0.010,'K'=>0.008,'J'=>0.002,'X'=>0.002,'Q'=>0.001,'Z'=>0.001
+    )
+    n = length(text)
+    counts = Dict{Char, Int}()
+    for c in text
+        counts[c] = get(counts, c, 0) + 1
+    end
+    
+    penalty = 0.0
+    for (c, expected_freq) in expected
+        actual_freq = get(counts, c, 0) / n
+        diff = abs(actual_freq - expected_freq)
+        #penalty -= diff  
+        penalty -= diff^2 * 1200.0    # quadrático + weight calibrado
+    end
+
+    return penalty
+end
 
 function calculate_fitness(text::Vector{Char}, ngrams::Dict{String, Float64})
     score = 0.0
-    penalty = -1.0
+    penalty = -11.63          # floor correto: log10(0.01 / total_quadgrams)
     
     n = length(text)
     
     # Bigramas (peso 0.5 - menos importante)
     for i in 1:n-1
         bg = String(text[i:i+1])
-        score += 0.0 * get(ngrams, bg, penalty)
+        score += 0.1 * get(ngrams, bg, penalty)
     end
     
     # Trigramas (peso 1.0 - importância média)
     for i in 1:n-2
         tg = String(text[i:i+2])
-        score += 0.0 * get(ngrams, tg, penalty)
+        score += 0.2 * get(ngrams, tg, penalty)
     end
     
     # Quadgramas (peso 2.0 - mais importantes)
     for i in 1:n-3
         qg = String(text[i:i+3])
-        score += 1.0 * get(ngrams, qg, penalty)
+        score += 0.7 * get(ngrams, qg, penalty)
     end
+
+    score += frequency_penalty(text)
     #println("Score: $score")
 
     return score
@@ -190,8 +217,7 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
     best_score = current_score
     
     for iter in 1:iterations
-        temp = 50.0 * (1.0 - iter / iterations)
-        
+
         new_key = copy(current_key)
         idx = rand(1:MAX_SYMBOL)
         new_key[idx] = rand(ALPHABET)
@@ -200,8 +226,12 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
         new_score = calculate_fitness(decodificado, ngrams)
         
         delta = new_score - current_score
+        #noise = 50.0 * (1.0 - iter / iterations)
+        noise = 30.0 * exp(-4.0 * iter / iterations) + 0.5
+
+        fermi = 1 / (1 + exp(-delta / noise)) #exp(delta / noise)
         
-        if delta > 0 || rand() < exp(delta / temp)
+        if rand() < fermi
             current_key = new_key
             current_score = new_score
             
@@ -211,8 +241,8 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
             end
         end
         
-        #text = String(decodificado)
-        #println("$iter  E1: $(text[1:98])")
+        text = String(decodificado)
+        println("t=$iter  E1: $(text[1:98]) score=$(round(new_score, digits=2))")
     end
     
     final_text = String([best_key[c] for c in cipher])
@@ -309,4 +339,4 @@ end
 
 
 
-solve_cipher(ciphertext, ngrams, restarts=10, iterations_per_restart=1E+1)
+solve_cipher(ciphertext, ngrams, restarts=1, iterations_per_restart=1E+7)

@@ -1,10 +1,6 @@
 using Random
 using DelimitedFiles
 
-# ==============================================================================
-# 1. DADOS DE ENTRADA (seu ciphertext continua o mesmo)
-# ==============================================================================
-
 const ciphertext = [
     # E1
     34,  43,  21,  70,  52,  17,  26,  61,  13,  53,  67,  44,  43,  52,  82,
@@ -188,19 +184,19 @@ function calculate_fitness(text::Vector{Char}, ngrams::Dict{String, Float64})
     # Bigramas (peso 0.5 - menos importante)
     for i in 1:n-1
         bg = String(text[i:i+1])
-        score += 0.1 * get(ngrams, bg, penalty)
+        score += 0.3 * get(ngrams, bg, penalty)
     end
     
     # Trigramas (peso 1.0 - importância média)
     for i in 1:n-2
         tg = String(text[i:i+2])
-        score += 0.2 * get(ngrams, tg, penalty)
+        score += 0.3 * get(ngrams, tg, penalty)
     end
     
     # Quadgramas (peso 2.0 - mais importantes)
     for i in 1:n-3
         qg = String(text[i:i+3])
-        score += 0.7 * get(ngrams, qg, penalty)
+        score += 0.4 * get(ngrams, qg, penalty)
     end
 
     score += frequency_penalty(text)
@@ -219,18 +215,26 @@ function hill_climbing(cipher::Vector{Int}, ngrams::Dict{String, Float64}; itera
     for iter in 1:iterations
 
         new_key = copy(current_key)
-        idx = rand(1:MAX_SYMBOL)
-        new_key[idx] = rand(ALPHABET)
+        if rand() < 0.5
+            # replace: muda um símbolo para letra aleatória
+            idx = rand(1:MAX_SYMBOL)
+            new_key[idx] = rand(ALPHABET)
+        else
+            # swap: troca as letras de dois símbolos
+            i = rand(1:MAX_SYMBOL)
+            j = rand(1:MAX_SYMBOL)
+            new_key[i], new_key[j] = new_key[j], new_key[i]
+        end
         
         decodificado = [new_key[c] for c in cipher]
         new_score = calculate_fitness(decodificado, ngrams)
         
         delta = new_score - current_score
-        #noise = 50.0 * (1.0 - iter / iterations)
-        noise = 30.0 * exp(-4.0 * iter / iterations) + 0.5
+        noise = 30.0 * (1.0 - iter / iterations)
 
         fermi = 1 / (1 + exp(-delta / noise)) #exp(delta / noise)
         
+        #if delta > 0 || rand() < exp(delta / max(noise, 0.01)) # metropolis
         if rand() < fermi
             current_key = new_key
             current_score = new_score
@@ -339,4 +343,4 @@ end
 
 
 
-solve_cipher(ciphertext, ngrams, restarts=1, iterations_per_restart=1E+7)
+solve_cipher(ciphertext, ngrams, restarts=1, iterations_per_restart=1E+5)

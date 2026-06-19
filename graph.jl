@@ -2,10 +2,11 @@ using Graphs
 using GraphMakie
 using CairoMakie
 using NetworkLayout
+using DelimitedFiles
 
 g = SimpleGraph(83)
 
-
+# isomorphs in same location
 strong_edges = [
 
 ]
@@ -71,4 +72,5 @@ hidespines!(ax)
 
 display(f)
 
-save("grafo_equivalencias.png", f)
+directoryPathPlots = string(@__DIR__, "/plots/")
+save(joinpath(directoryPathPlots, "grafo_equivalencias.png"), f)

@@ -48,7 +48,6 @@ end
 
 adicionar("nther",  [67, 6, 50, 76, 55])
 #adicionar("nther",  [67, 6, 50, 76, 55, 3, 61, 30, 41, 3, 56, 10, 16, 60, 19, 69, 4, 37, 6, 48])
-# ing, tion, ed ,ly es , ment
 
 
 
@@ -64,7 +63,7 @@ adicionar("nther",  [67, 6, 50, 76, 55])
 64, 43, 25, 42 
 =#
 
-# E sua função de decodificar continua igual
+
 function decodificar(msg)
     return join([get(mapa, n, '_') for n in msg])
 end
@@ -88,7 +87,6 @@ mensagens = [
 function isomorphs()
     alfabeto = collect("abcdefghijklmnopqrstuvwxyz")
     
-    # Vetores para armazenar os resultados
     global isom_E1 = Char[]
     global isom_W1 = Char[]
     global isom_E2 = Char[]
@@ -102,18 +100,18 @@ function isomorphs()
     lista_isom = [isom_E1, isom_W1, isom_E2, isom_W2, isom_E3, isom_W3, isom_E4, isom_W4, isom_E5]
     
     for (idx, (msg, nome)) in enumerate(mensagens)
-        # mapa_num_letra guarda qual letra foi dada a cada número
+
         mapa_num_letra = Dict{Int, Char}()
         counter = 1
         
         for i in 1:length(msg)
             numero_atual = msg[i]
             
-            # Se esse número já apareceu, usa a letra que ele já ganhou
+
             if haskey(mapa_num_letra, numero_atual)
                 letra = mapa_num_letra[numero_atual]
             else
-                # Se é novo, atribui a letra atual do contador e incrementa
+
                 letra = alfabeto[counter]
                 mapa_num_letra[numero_atual] = letra
                 counter += 1
@@ -155,22 +153,26 @@ println("East 5:  ", E5_decod)
 #println("         ", join(isom_E5))
 
 
+mensagens2 = [E1_decod, W1_decod, E2_decod, W2_decod, E3_decod, W3_decod, E4_decod, W4_decod, E5_decod]
 
-for msg in mensagens
+for msg in mensagens2
     for i in 1:length(msg)-4
         a = msg[i]
         b = msg[i+1]
         c = msg[i+2]
         d = msg[i+3]
 
-        if c == "q" && d != "u"
+        if c == 'q' && d != 'u'
             println("Absurdo! q seguido de $d")
         end
 
-        if a == b == c == d
-            println("Absurdo! 4 consoantes")
+        if a == b && b == c && c == d && a != '_'
+            println("Absurdo! 4 caracteres iguais seguidos: $a")
         end
-    
+
+        if (c == d == 'i') || (c == d == 'a') || (c == d == 'u')
+            println("Cuidado! $c $d seguidos")
+        end
     end
 end
 

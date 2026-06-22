@@ -37,70 +37,36 @@ msgE5a = [
     34, 67, 6, 50, 76, 55, 3, 61, 30, 41, 3, 56, 10, 16, 60, 19, 69, 4, 37, 6, 48, 34, 22, 60, 45, 19, 29, 77, 60, 35, 61, 64, 80, 28, 13, 55, 6, 50, 49, 55, 56, 53, 63, 73, 70, 11, 58, 23, 59, 49, 68, 54, 8, 35, 33, 31, 32, 20, 27, 9, 35, 47, 8, 31, 72, 56, 35, 76, 55, 10, 7, 61, 6, 24, 26, 46, 43, 81, 26, 13, 23, 77, 21, 52, 63, 22, 41, 10, 42, 11, 45, 74, 9, 34, 71, 74, 7, 32, 22, 73, 6, 41, 62, 52, 43, 67, 65, 75, 62, 26, 64, 43, 25, 42
 ]
 
-#msgE1 = replace(msgE1a, 43 => 'A')
-#@printf("Message E1: %s\n", msgE1)
+
+mapa = Dict{Int, Char}()
+
+function adicionar(palavra, numeros)
+    for (i, num) in enumerate(numeros)
+        mapa[num] = palavra[i]
+    end
+end
+
+adicionar("nther",  [67, 6, 50, 76, 55])
+#adicionar("nther",  [67, 6, 50, 76, 55, 3, 61, 30, 41, 3, 56, 10, 16, 60, 19, 69, 4, 37, 6, 48])
+# ing, tion, ed ,ly es , ment
+
+
 
 #=
-e, t, a, i, o, n, s, h, and r.
-
-The most common two-letter words are to, of, in, it, is, as, at, be, we, he, so, on, an, or, do, if, up, by, and my
-
-The most common three-letter words are the, and, are,for, not, but, had, has, was, all, any, one, man, out, you, his, her, and can.
-
-The most common four-letter words are that, with, have, this, will, your, from, they, want, been, good, much, some, and very.
-
-The most common word endings are -ed, -ing, -ion, -ist, -ous, -ent, -able, -ment, -tion, -ight, and -ance.    
-
-The most frequent double-letter combinations are ee, ll, ss, oo, tt,ff, rr, nn, pp, and cc.
-
-The double letters that occur most commonly at the end of words are ee, ll, ss, and ff.
-
-A comma is often followed by but, and, or who.
-A question often begins with why, how, who, was, did, what, where, or which.
-Two words that often precede quotation marks are said and says.
-Two letters that usually follow an apostrophe are t and s.
-
+14, 65, 44, 49,
+63, 10, 35, 19,
+54, 61, 39, 35
+54, 64, 61, 17,
+26, 36, 9, 25
+25, 31, 55, 71,
+78, 60, 79, 20,
+47, 21, 41, 31,
+64, 43, 25, 42 
 =#
 
-# Mapeamento dos números para letras
-mapa = Dict(
-
-    # frequencies
-    67 => 'n', 6 => 't', 50 => 'h', 76 => 'e', 55 => 'r',
-    #63 => 'e', 14 => 'a', 
-    #3 => 't', 61 => 'o', 
-    
-    # first of each message
-    51 => 'o',
-    81 => 'o',
-    37 => 'o',
-    77 => 'o',
-    64 => 'o',
-    35 => 'o',
-    28 => 'o',
-    78 => 'o',
-    34 => 'o',
-
-    #49 => 'h', 63 => 'e',
-
-    #isomoprhs
-    #14 => 'o', 13 => 'o', 20 => 'o', 38 => 'o', 12 => 'o',
-    #18 => 'r', 58 => 'r', 65 => 'r', 64 => 'r', 75 => 'r'
-
-)
-
-# Função para converter
+# E sua função de decodificar continua igual
 function decodificar(msg)
-    texto = ""
-    for n in msg
-        if haskey(mapa, n)
-            texto *= mapa[n]
-            #texto *= string(n)
-        else
-            texto *= "_"
-        end
-    end
-    return texto
+    return join([get(mapa, n, '_') for n in msg])
 end
 
 E1_decod = decodificar(msgE1a)
@@ -190,43 +156,21 @@ println("East 5:  ", E5_decod)
 
 
 
-# escrever sentenca e testar em todas posicoes
+for msg in mensagens
+    for i in 1:length(msg)-4
+        a = msg[i]
+        b = msg[i+1]
+        c = msg[i+2]
+        d = msg[i+3]
 
-
-function decodificar_por_blocos(mensagens)
-    # Dicionário de blocos baseados na sua análise (os mais frequentes)
-    # Adicione ou ajuste conforme você for confirmando os padrões
-    mapa_blocos = Dict(
-        [6, 50, 76] => "THE",
-        [6, 50, 76, 55] => "THEN", # Ou "TION" dependendo da posição
-        [61, 30, 41] => "INT",
-        [67, 6, 50] => "ATI",
-        [50, 76, 55] => "HEN",
-        [3, 61, 30] => "ING"
-    )
-    
-    for (msg, nome) in mensagens
-        # Convertemos para uma string ou vetor de string para facilitar a leitura
-        texto_resultado = String[]
-        i = 1
-        while i <= length(msg)
-            # Verifica se existe um bloco começando nesta posição
-            encontrou_bloco = false
-            for (bloco, traducao) in mapa_blocos
-                if i + length(bloco) - 1 <= length(msg) && msg[i:i+length(bloco)-1] == bloco
-                    push!(texto_resultado, "[" * traducao * "]")
-                    i += length(bloco)
-                    encontrou_bloco = true
-                    break
-                end
-            end
-            
-            # Se não for bloco, trata como símbolo único
-            if !encontrou_bloco
-                push!(texto_resultado, string(msg[i]))
-                i += 1
-            end
+        if c == "q" && d != "u"
+            println("Absurdo! q seguido de $d")
         end
-        println("Resultado Estrutural $nome: ", join(texto_resultado, " "))
+
+        if a == b == c == d
+            println("Absurdo! 4 consoantes")
+        end
+    
     end
 end
+

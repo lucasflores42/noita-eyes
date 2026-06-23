@@ -206,19 +206,48 @@ mapeamento = Dict(
     "440"=>121, "441"=>122, "442"=>123, "443"=>124, "444"=>125
 )
 
+mapeamento2 = Dict(
+    "000"=>1, "111"=>2, "222"=>3, "333"=>4, "444"=>5,
+    "001"=>6, "010"=>6, "100"=>6, "002"=>7, "020"=>7,
+    "200"=>7, "003"=>8, "030"=>8, "300"=>8, "004"=>9,
+    "040"=>9, "400"=>9, "011"=>10, "101"=>10, "110"=>10,
+    "022"=>11, "202"=>11, "220"=>11, "033"=>12, "303"=>12,
+    "330"=>12, "044"=>13, "404"=>13, "440"=>13, "112"=>14,
+    "121"=>14, "211"=>14, "113"=>15, "131"=>15, "311"=>15,
+    "114"=>16, "141"=>16, "411"=>16, "122"=>17, "212"=>17,
+    "221"=>17, "133"=>18, "313"=>18, "331"=>18, "144"=>19,
+    "414"=>19, "441"=>19, "223"=>20, "232"=>20, "322"=>20,
+    "224"=>21, "242"=>21, "422"=>21, "233"=>22, "323"=>22,
+    "332"=>22, "244"=>23, "424"=>23, "442"=>23, "334"=>24,
+    "343"=>24, "433"=>24, "344"=>25, "434"=>25, "443"=>25,
+    "012"=>26, "021"=>26, "102"=>26, "120"=>26, "201"=>26,
+    "210"=>26, "013"=>27, "031"=>27, "103"=>27, "130"=>27,
+    "301"=>27, "310"=>27, "014"=>28, "041"=>28, "104"=>28,
+    "140"=>28, "401"=>28, "410"=>28, "023"=>29, "032"=>29,
+    "203"=>29, "230"=>29, "302"=>29, "320"=>29, "024"=>30,
+    "042"=>30, "204"=>30, "240"=>30, "402"=>30, "420"=>30,
+    "034"=>31, "043"=>31, "304"=>31, "340"=>31, "403"=>31,
+    "430"=>31, "123"=>32, "132"=>32, "213"=>32, "231"=>32,
+    "312"=>32, "321"=>32, "124"=>33, "142"=>33, "214"=>33,
+    "241"=>33, "412"=>33, "421"=>33, "134"=>34, "143"=>34,
+    "314"=>34, "341"=>34, "413"=>34, "431"=>34, "234"=>35,
+    "243"=>35, "324"=>35, "342"=>35, "423"=>35, "432"=>35
+)
+
+
 function converter_para_ids(lista, mapa)
     return [get(mapa, t, 0) for t in lista]
 end
 
-IDs_E1 = converter_para_ids(msg_E1_trigram, mapeamento)
-IDs_W1 = converter_para_ids(msg_W1_trigram, mapeamento)
-IDs_E2 = converter_para_ids(msg_E2_trigram, mapeamento)
-IDs_W2 = converter_para_ids(msg_W2_trigram, mapeamento)
-IDs_E3 = converter_para_ids(msg_E3_trigram, mapeamento)
-IDs_W3 = converter_para_ids(msg_W3_trigram, mapeamento)
-IDs_E4 = converter_para_ids(msg_E4_trigram, mapeamento)
-IDs_W4 = converter_para_ids(msg_W4_trigram, mapeamento)
-IDs_E5 = converter_para_ids(msg_E5_trigram, mapeamento)
+IDs_E1 = converter_para_ids(msg_E1_trigram, mapeamento2)
+IDs_W1 = converter_para_ids(msg_W1_trigram, mapeamento2)
+IDs_E2 = converter_para_ids(msg_E2_trigram, mapeamento2)
+IDs_W2 = converter_para_ids(msg_W2_trigram, mapeamento2)
+IDs_E3 = converter_para_ids(msg_E3_trigram, mapeamento2)
+IDs_W3 = converter_para_ids(msg_W3_trigram, mapeamento2)
+IDs_E4 = converter_para_ids(msg_E4_trigram, mapeamento2)
+IDs_W4 = converter_para_ids(msg_W4_trigram, mapeamento2)
+IDs_E5 = converter_para_ids(msg_E5_trigram, mapeamento2)
 
 println(" E1: ", IDs_E1)
 println(" W1: ", IDs_W1)

@@ -173,6 +173,10 @@ for msg in mensagens2
         if (c == d == 'i') || (c == d == 'a') || (c == d == 'u')
             println("Cuidado! $c $d seguidos")
         end
+
+        
     end
 end
+
+# proximo passo: frequencias por msg?
 

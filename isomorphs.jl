@@ -44,15 +44,18 @@ for i in 1:length(messages)
     msg = messages[i]
     nome = nomes[i]
     
-    for j in 1:length(msg)-3
-        a = msg[j]
-        b = msg[j+1]
-        c = msg[j+2]
-        d = msg[j+3]
+    for j in 1:length(msg)-8
 
-        if a == b || a == c || a == d || b == c || b == d || c == d
-            push!(isomorphs, (nome, j, [a, b, c, d]))
-        end
+          a = msg[j]
+          b = msg[j+1]
+          c = msg[j+2]
+          d = msg[j+3]
+          e = msg[j+4]
+
+          #if a == b || a == c || a == d || b == c || b == d || c == d
+          if a == d
+               push!(isomorphs, (nome, j, [msg[j-3],msg[j-2],msg[j-1], a, b, c, d, e, msg[j+5],msg[j+6]]))
+          end
     end
 end
 sort!(isomorphs, by = x -> x[2])

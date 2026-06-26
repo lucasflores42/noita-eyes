@@ -46,23 +46,63 @@ function adicionar(palavra, numeros)
     end
 end
 
-adicionar("nther",  [67, 6, 50, 76, 55])
-#adicionar("nther",  [67, 6, 50, 76, 55, 3, 61, 30, 41, 3, 56, 10, 16, 60, 19, 69, 4, 37, 6, 48])
+# ismomorfo a b a
+#adicionar("threeeyes", [56, 62, 48, 13, 22, 13, 50, 55, 35])
+#adicionar("threeeyes", [33, 12, 19, 20, 44, 20, 82, 43, 5])
+#adicionar("threeeyes", [60, 42, 81, 14, 61, 14, 82, 23, 36])
+#adicionar("threeeyes", [31, 36, 63, 38, 1, 38, 6, 39, 56])
+#adicionar("threeeyes", [80, 43, 69, 12, 72, 12, 49, 4, 68])
 
 
+# isomorfo: a b c a
+#adicionar("secret", [45, 49, 43, 20, 49, 14])
+#adicionar("truth", [55, 25, 31, 55, 71])
+#adicionar("secret", [12, 75, 57, 5, 75, 20])
+#adicionar("secret", [47, 18, 37, 14, 18, 22])
+#adicionar("secret", [73, 58, 21, 24, 58, 66])
+#adicionar("secret", [46, 64, 15, 54, 64, 61])
+#adicionar("secret", [48, 18, 5, 7, 18, 6])
+#adicionar("secret", [75, 55, 25, 31, 55, 71])
 
-#=
-14, 65, 44, 49,
-63, 10, 35, 19,
-54, 61, 39, 35
-54, 64, 61, 17,
-26, 36, 9, 25
-25, 31, 55, 71,
-78, 60, 79, 20,
-47, 21, 41, 31,
-64, 43, 25, 42 
-=#
+#adicionar("knowledge", [15, 22, 71, 48, 45, 49, 43, 20, 49]) no
+#adicionar("knowledge", [48, 41, 81, 7, 14, 65, 30, 50, 65]) no
+#adicionar("knowledge", [6, 26, 21, 72, 12, 75, 57, 5, 75]) no
+#adicionar("knowledge", [26, 65, 82, 69, 47, 18, 37, 14, 18]) no
+#adicionar("knowledge", [23, 1, 12, 42, 73, 58, 21, 24, 58]) no
+#adicionar("knowledge", [69, 81, 18, 8, 46, 64, 15, 54, 64]) possible
+#adicionar("knowledge", [83, 23, 79, 37, 48, 18, 5, 7, 18]) possible
+#adicionar("knowledge", [18, 74, 37, 76, 75, 55, 25, 31, 55]) possible
 
+adicionar("essence", [71, 48, 45, 49, 43, 20, 49])
+adicionar("essence", [49, 43, 20, 49, 14, 48, 20]) # no
+"""                            _  A   _   B   _   C   B   _   A   C
+msgE1 position: 43 isomorph: [71, 48, 45, 49, 43, 20, 49, 14, 48, 20]
+msgW1 position: 43 isomorph: [71, 48, 45, 49, 43, 20, 49, 14, 48, 20]
+msgE2 position: 48 isomorph: [81, 7, 14, 65, 30, 50, 65, 64, 7, 50]
+msgE1 position: 71 isomorph: [21, 72, 12, 75, 57, 5, 75, 20, 72, 5]
+msgW1 position: 73 isomorph: [82, 69, 47, 18, 37, 14, 18, 22, 69, 14]
+msgE2 position: 83 isomorph: [12, 42, 73, 58, 21, 24, 58, 66, 42, 24]
+msgE3 position: 104 isomorph: [79, 37, 48, 18, 5, 7, 18, 6, 37, 80]
+"""
+
+
+# isomorfo:                 a   b   c   d   a
+#adicionar("", [59, 81, 18, 55, 80, 76, 49, 55])  # msgE4 position: 36
+#adicionar("", [80, 28, 13, 55,  6, 50, 49, 55])  # msgE5 position: 36
+#adicionar("seeks", [14, 18, 22, 69, 14])
+#adicionar("seeks", [26, 46, 43, 81, 26])
+#adicionar("", [53, 71, 27, 24, 33, 32, 65, 24])  # msgW2 position: 74
+#adicionar("", [ 5, 57, 23, 61, 19, 76, 44, 61])  # msgE4 position: 74 
+#adicionar("", [47, 18, 37, 14, 18, 22, 69, 14])  # msgW1 position: 75
+#adicionar("", [61,  6, 24, 26, 46, 43, 81, 26])  # msgE5 position: 75
+
+adicionar("ttttttttt", [51, 81, 37, 77, 64, 35, 28, 78, 34]) # first letters
+adicionar("he", [67, 6]) # second third letters
+
+# knowledge_wg_l abcdefghf_dh_e
+#     secret_r_s 
+# three eyes
+#    ab cde
 
 function decodificar(msg)
     return join([get(mapa, n, '_') for n in msg])
@@ -123,7 +163,7 @@ function isomorphs()
     end
 end
 
-isomorphs()
+#isomorphs()
 
 println("East 1:  ", E1_decod)
 #println("         ", join(isom_E1))

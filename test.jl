@@ -53,7 +53,6 @@ end
 #adicionar("threeeyes", [31, 36, 63, 38, 1, 38, 6, 39, 56])
 #adicionar("threeeyes", [80, 43, 69, 12, 72, 12, 49, 4, 68])
 
-
 # isomorfo: a b c a
 #adicionar("secret", [45, 49, 43, 20, 49, 14])
 #adicionar("truth", [55, 25, 31, 55, 71])
@@ -73,9 +72,13 @@ end
 #adicionar("knowledge", [83, 23, 79, 37, 48, 18, 5, 7, 18]) possible
 #adicionar("knowledge", [18, 74, 37, 76, 75, 55, 25, 31, 55]) possible
 
-adicionar("essence", [71, 48, 45, 49, 43, 20, 49])
-adicionar("essence", [49, 43, 20, 49, 14, 48, 20]) # no
-"""                            _  A   _   B   _   C   B   _   A   C
+#adicionar("essence", [71, 48, 45, 49, 43, 20, 49])
+#adicionar("essence", [49, 43, 20, 49, 14, 48, 20]) # no
+                                
+#=
+protestors
+                                c  o   n   t   e   n   t   i   o   n
+                                _  A   _   B   _   C   B   _   A   C
 msgE1 position: 43 isomorph: [71, 48, 45, 49, 43, 20, 49, 14, 48, 20]
 msgW1 position: 43 isomorph: [71, 48, 45, 49, 43, 20, 49, 14, 48, 20]
 msgE2 position: 48 isomorph: [81, 7, 14, 65, 30, 50, 65, 64, 7, 50]
@@ -83,8 +86,8 @@ msgE1 position: 71 isomorph: [21, 72, 12, 75, 57, 5, 75, 20, 72, 5]
 msgW1 position: 73 isomorph: [82, 69, 47, 18, 37, 14, 18, 22, 69, 14]
 msgE2 position: 83 isomorph: [12, 42, 73, 58, 21, 24, 58, 66, 42, 24]
 msgE3 position: 104 isomorph: [79, 37, 48, 18, 5, 7, 18, 6, 37, 80]
-"""
-
+=#
+#adicionar("contention", [71, 48, 45, 49, 43, 20, 49, 14, 48, 20]) 
 
 # isomorfo:                 a   b   c   d   a
 #adicionar("", [59, 81, 18, 55, 80, 76, 49, 55])  # msgE4 position: 36
@@ -96,13 +99,20 @@ msgE3 position: 104 isomorph: [79, 37, 48, 18, 5, 7, 18, 6, 37, 80]
 #adicionar("", [47, 18, 37, 14, 18, 22, 69, 14])  # msgW1 position: 75
 #adicionar("", [61,  6, 24, 26, 46, 43, 81, 26])  # msgE5 position: 75
 
+# strong isomoprhs
+#adicionar("", [80, 6]); adicionar("", [76, 50])
+#adicionar("", [24, 61]); adicionar("", [33, 19]); adicionar("", [32, 76]); adicionar("", [65, 44])
+#adicionar("", [14, 26]); adicionar("", [18, 46]); adicionar("", [22, 43]); adicionar("", [69, 81])
 adicionar("ttttttttt", [51, 81, 37, 77, 64, 35, 28, 78, 34]) # first letters
-adicionar("he", [67, 6]) # second third letters
 
-# knowledge_wg_l abcdefghf_dh_e
-#     secret_r_s 
-# three eyes
-#    ab cde
+# after adding the above, we have doubles: 51, 76, 65, 6
+
+#adicionar("he", [67, 6]) # second third letters
+
+
+
+#adicionar("thetruthist", [67, 6, 49, 63, 14, 76, 30, 25, 62, 43, 71, 67, 63, 33, 15, 82, 9, 16, 79, 3, 30, 14, 50, 2]) # first header
+#adicionar("thetruthist", [67, 6, 50, 76, 55, 3, 61, 30, 41, 3, 56, 10, 16, 60, 19, 69, 4, 37, 6, 48]) # third header
 
 function decodificar(msg)
     return join([get(mapa, n, '_') for n in msg])

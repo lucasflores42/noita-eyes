@@ -38,33 +38,99 @@ msgE5 = [
 messages = [msgE1, msgW1, msgE2, msgW2, msgE3, msgW3, msgE4, msgW4, msgE5]
 nomes = ["msgE1", "msgW1", "msgE2", "msgW2", "msgE3", "msgW3", "msgE4", "msgW4", "msgE5"]
 
-isomorphs = []
 
-for i in 1:length(messages)
-    msg = messages[i]
-    nome = nomes[i]
-    
-    for j in 1:length(msg)-8
+iterations = 1
 
-          a = msg[j]
-          b = msg[j+1]
-          c = msg[j+2]
-          d = msg[j+3]
-          e = msg[j+4]
+for k in 1:iterations
 
-          #if a == b || a == c || a == d || b == c || b == d || c == d
-          if a == c
-               push!(isomorphs, (nome, j, [a, b, c, d, e]))
+     isomorphs = []
+     for i in 1:length(messages)
+          msg = messages[i]
+          nome = nomes[i]
+          
+          for j in 1:length(msg)-8
+
+                    a = msg[j]
+                    b = msg[j+1]
+                    c = msg[j+2]
+                    d = msg[j+3]
+                    e = msg[j+4]
+
+                    #if a == b || a == c || a == d || b == c || b == d || c == d
+                    if a == c 
+                         push!(isomorphs, (nome, j, [a, b, c, d, e], 3))
+                    elseif a == d
+                         push!(isomorphs, (nome, j, [a, b, c, d, e], 4))
+                    elseif a == e
+                         push!(isomorphs, (nome, j, [a, b, c, d, e], 5))
+                    end
           end
+     end
+     sort!(isomorphs, by = x -> x[2])   
+
+     # Criar mapeamentos de substituição (a->a, b->b, c->c, d->d, e->e)
+     mapeamentos = Dict()
+     
+     for i in 1:length(isomorphs)
+          item1 = isomorphs[i]
+          println(item1[1], " position: ", item1[2], " isomorph: ", item1[3])
+
+          for j in i+1:length(isomorphs)
+               
+               item2 = isomorphs[j]
+               
+               if item1[2] == item2[2]  # mesma posição
+                    seq1 = item1[3]
+                    seq2 = item2[3]
+                    
+                    # Mapear a, b, c, d, e
+                    for idx in 1:item1[4]
+                         if seq1[idx] != seq2[idx]
+                              mapeamentos[seq1[idx]] = seq2[idx]
+                         end
+                    end
+               end
+          end
+     end
+
+     # Aplicar mapeamentos em todas as mensagens
+     if !isempty(mapeamentos)
+        for (k, v) in mapeamentos
+            println("  $k → $v")
+        end
+        
+        for i in 1:length(messages)
+            msg = messages[i]
+            nome = nomes[i]
+            
+            for idx in 1:length(msg)
+                if haskey(mapeamentos, msg[idx])
+                    msg[idx] = mapeamentos[msg[idx]]
+                end
+            end
+            
+            #println("  $nome transformada (primeiros 10): $(msg[1:min(10, length(msg))])...")
+        end
     end
-end
-sort!(isomorphs, by = x -> x[2])
-for item in isomorphs
-    println(item[1], " position: ", item[2], " isomorph: ", item[3])
-end
+    
+     # Verificar se temos 4 ou mais isomorfos em sequência
+     for i in 1:length(messages)
+          msg = messages[i]
+          nome = nomes[i]
+          
+          for j in 1:length(msg)-3
+               if msg[j] == msg[j+1] && msg[j] == msg[j+2] && msg[j] == msg[j+3]
+                    println(" posição $j: $(msg[j]), $(msg[j+1]), $(msg[j+2]), $(msg[j+3]) são IGUAIS")
+               end
+          end
+     end
 
+     # tamanho alfabeto
+     todos_simbolos = []
+     for msg in messages
+          append!(todos_simbolos, msg)  # junta todas as mensagens numa lista só
+     end
 
-# replace strong isomorphs
-# count total number of symbols
-# check if we have 4 in sequence
-# do it again
+     simbolos_unicos = unique(todos_simbolos)  # pega só os números diferentes
+     println("tamanho alfabeto: $(length(simbolos_unicos))") 
+end

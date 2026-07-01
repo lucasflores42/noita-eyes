@@ -192,16 +192,17 @@ for r in 1:10
     key, score, text = hill_climbing(ciphertext, bi, fl_bi, tri, fl_tri, qd, fl_qd;
                                      iterations=100_000)
     if score > best_score
-        best_score = score
-        best_text  = text
-        best_key   = key
+        global best_score = score
+        global best_text  = text
+        global best_key   = key
     end
     println("Restart $r: score=$(round(score,digits=1))  melhor=$(round(best_score,digits=1))")
 end
 
 println()
 println("=== RESULTADO ($(uppercase(LANGUAGE))) ===")
-boundaries = [(1,99),(100,202),(203,320),(321,422),(423,559),(560,683),(684,802),(803,922),(923,end)]
+L = length(best_text)
+boundaries = [(1,99),(100,202),(203,320),(321,422),(423,559),(560,683),(684,802),(803,922),(923,L)]
 labels = ["E1","W1","E2","W2","E3","W3","E4","W4","E5"]
 for (label, (a,b)) in zip(labels, boundaries)
     b2 = min(b, length(best_text))

@@ -58,11 +58,11 @@ for k in 1:iterations
 
                     #if a == b || a == c || a == d || b == c || b == d || c == d
                     if a == c 
-                         push!(isomorphs, (nome, j, [a, b, c, d, e], 3))
+                         push!(isomorphs, (nome, j, [a, b, c], 3))
                     elseif a == d
-                         push!(isomorphs, (nome, j, [a, b, c, d, e], 4))
+                         push!(isomorphs, (nome, j, [a, b, c, d], 4))
                     elseif a == e
-                         push!(isomorphs, (nome, j, [a, b, c, d, e], 5))
+                         #push!(isomorphs, (nome, j, [a, b, c, d, e], 5))
                     end
           end
      end

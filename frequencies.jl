@@ -92,7 +92,9 @@ open("quads.txt", "w") do f
         for j in 1:83
             for k in 1:83
                 for l in 1:83
-                    println(f, i, "\t", j, "\t", k, "\t", l, "\t", quads[i, j, k, l])
+                    if quads[i, j, k, l] != 0
+                        println(f, i, "\t", j, "\t", k, "\t", l, "\t", quads[i, j, k, l])
+                    end
                 end
             end
         end
